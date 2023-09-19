@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\InsertLead;
 use App\Models\AuditLog;
 use App\Models\CampaignUpload;
 use App\Models\LauronLead;
@@ -650,7 +651,8 @@ class CampaignUploadController extends Controller
         $chunks = array_chunk($leadsToInsert, 500);
 
         foreach ($chunks as $chunk) {
-            LauronLead::insert($chunk);
+            // LauronLead::insert($chunk);
+            InsertLead::dispatch($chunk);
             // Do insert here
         }
         $campaignUpload->save();
