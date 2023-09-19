@@ -81,6 +81,14 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request)
     {
+        $auditLog = new AuditLog();
+        $auditLog->agent = auth()->user()->id;
+        $auditLog->action = "Logged Out";
+        $auditLog->table = "";
+        $auditLog->nID = "";
+        $auditLog->ip = \Request::ip();
+        $auditLog->save();
+
         $user = User::where('id', auth()->user()->id)->where('deleted', '0')->first();
         if (!empty($user)) {
             $user->online = "0";
