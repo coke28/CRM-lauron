@@ -349,7 +349,7 @@ class LauronAccountController extends Controller
         $accountCallHistory->ip = \Request::ip();
         $accountCallHistory->fullname = $account->customerName;
         $accountCallHistory->origTimestamp = $request->dateStamp;
-        $accountCallHistory->remark =  $request->reason;
+        $accountCallHistory->remark = $request->remarkStatus;
         $accountCallHistory->callEnded = \Carbon\Carbon::now('Asia/Singapore')->toDateTimeString();
 
         $startTime = Carbon::parse($request->dateStamp);
@@ -646,6 +646,8 @@ class LauronAccountController extends Controller
         $account->save();
         $accountCallHistory->save();
         // $lead->save();
+
+
 
 
 
