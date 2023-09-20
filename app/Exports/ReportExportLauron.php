@@ -14,7 +14,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class ReportExportLauron implements FromCollection, WithHeadings
 {
-     /**
+    /**
      * @return \Illuminate\Support\Collection
      */
     use Exportable;
@@ -83,6 +83,37 @@ class ReportExportLauron implements FromCollection, WithHeadings
                     )
                     // ->where('campaignName', $parsedCampaignName)
                     ->where('deleted', '0');
+
+                    if (!empty($this->filterType)) {
+
+                        if ($this->filterType == '1') {
+                        }
+                        if ($this->filterType == '2') {
+                            $query = $query->where('status', '0');
+                        }
+                        if ($this->filterType == '3') {
+                            $query = $query->where('status', '1');
+                        }
+                    }
+            
+                    if (!empty($this->campaignID)) {
+            
+                        $query = $query->where('campaignID', $this->campaignID);
+                    }
+            
+                    if (!empty($this->campaignName)) {
+            
+                        $query = $query->where('campaignName', $this->campaignName);
+                    }
+                    if ($this->dateType == 'date_range') {
+                        $date = \Carbon\Carbon::parse($this->endDate);
+                        $date->addDay();
+                        $query = $query->whereBetween('updated_at', [$this->startDate, $date]);
+                    }
+                    if ($this->dateType == 'today') {
+            
+                        $query = $query->whereDate('updated_at', Carbon::now());
+                    }
                 break;
             case 'ExtractAccounts':
                 # code...
@@ -121,44 +152,115 @@ class ReportExportLauron implements FromCollection, WithHeadings
                     )
                     // ->where('campaignName', $parsedCampaignName)
                     ->where('deleted', '0');
-                break;
-            }
 
+                    if (!empty($this->filterType)) {
 
-
-        if (!empty($this->filterType)) {
-
-            if ($this->filterType == '1') {
-            }
-            if ($this->filterType == '2') {
-                $query = $query->where('status', '0');
-            }
-            if ($this->filterType == '3') {
-                $query = $query->where('status', '1');
-            }
-        }
-      
-        if (!empty($this->campaignID)) {
-          
-            $query = $query->where('campaignID', $this->campaignID);
-           
-        }
-   
-        if (!empty($this->campaignName)) {
-          
-            $query = $query->where('campaignName', $this->campaignName);
-           
-        }
-        if ($this->dateType == 'date_range') {
-            $date = \Carbon\Carbon::parse($this->endDate);
-            $date->addDay();
-            $query = $query->whereBetween('updated_at', [$this->startDate, $date]);
-        }
-        if ($this->dateType == 'today') {
-          
-            $query = $query->whereDate('updated_at', Carbon::now());
-             
+                        if ($this->filterType == '1') {
+                        }
+                        if ($this->filterType == '2') {
+                            $query = $query->where('status', '0');
+                        }
+                        if ($this->filterType == '3') {
+                            $query = $query->where('status', '1');
+                        }
+                    }
             
+                    if (!empty($this->campaignID)) {
+            
+                        $query = $query->where('campaignID', $this->campaignID);
+                    }
+            
+                    if (!empty($this->campaignName)) {
+            
+                        $query = $query->where('campaignName', $this->campaignName);
+                    }
+                    if ($this->dateType == 'date_range') {
+                        $date = \Carbon\Carbon::parse($this->endDate);
+                        $date->addDay();
+                        $query = $query->whereBetween('updated_at', [$this->startDate, $date]);
+                    }
+                    if ($this->dateType == 'today') {
+            
+                        $query = $query->whereDate('updated_at', Carbon::now());
+                    }
+                break;
+            case 'CallSummary':
+                # code...
+                $query = DB::table('lauronAccounts')
+                    ->join('lauronLeads', 'lauronAccounts.leadID', '=', 'lauronLeads.id')
+                    ->join('accountCallHistory', 'lauronLeads.id', '=', 'accountCallHistory.leadsID')
+                    ->select(
+                        'accountCallHistory.date',
+                        'accountCallHistory.action',
+                        'accountCallHistory.statusCode',
+                        'accountCallHistory.origTimestamp',
+                        'accountCallHistory.callEnded',
+                        'accountCallHistory.aht',
+                        'lauronAccounts.campaignName',
+                        'lauronAccounts.segment',
+                        'lauronAccounts.endoDate',
+                        'lauronAccounts.accountNumber',
+                        'lauronAccounts.originalBalance',
+                        'lauronAccounts.principalBalance',
+                        'lauronAccounts.area',
+                        'lauronAccounts.collectionEffort',
+                        'lauronAccounts.transaction',
+                        'lauronAccounts.placeOfContact',
+                        'lauronAccounts.pointOfContact',
+                        'lauronAccounts.notes',
+                        'lauronAccounts.created_at',
+                        'lauronAccounts.updated_at',
+                        'lauronAccounts.ptpAmount',
+                        'lauronAccounts.ptpDate',
+                        'lauronAccounts.agentName',
+                        'lauronAccounts.leadStatus',
+                        'lauronAccounts.customerName',
+                        'lauronAccounts.mobileNumber',
+                        'lauronAccounts.homeNumber',
+                        'lauronAccounts.officeNumber',
+                        'lauronAccounts.otherContact1',
+                        'lauronAccounts.otherContact2',
+                        'lauronAccounts.otherContact3',
+                        'lauronAccounts.homeAddress',
+                        'lauronAccounts.CEAddressBusinessAddress',
+                        'lauronAccounts.otherAddress1',
+                        'lauronAccounts.otherAddress2',
+                        'lauronAccounts.remarkStatus',
+                    )
+                    // ->where('campaignName', $parsedCampaignName)
+                    ->where('lauronAccounts.deleted', '0');
+
+                    if (!empty($this->filterType)) {
+
+                        if ($this->filterType == '1') {
+                        }
+                        if ($this->filterType == '2') {
+                            $query = $query->where('lauronAccounts.status', '0');
+                        }
+                        if ($this->filterType == '3') {
+                            $query = $query->where('lauronAccounts.status', '1');
+                        }
+                    }
+            
+                    if (!empty($this->campaignID)) {
+            
+                        $query = $query->where('lauronAccounts.campaignID', $this->campaignID);
+                    }
+            
+                    if (!empty($this->campaignName)) {
+            
+                        $query = $query->where('lauronAccounts.campaignName', $this->campaignName);
+                    }
+                    if ($this->dateType == 'date_range') {
+                        $date = \Carbon\Carbon::parse($this->endDate);
+                        $date->addDay();
+                        $query = $query->whereBetween('accountCallHistory.callEnded', [$this->startDate, $date]);
+                    }
+                    if ($this->dateType == 'today') {
+            
+                        $query = $query->whereDate('accountCallHistory.callEnded', Carbon::now());
+                    }
+                break;
         }
 
         $output = $query->get();
@@ -171,9 +273,9 @@ class ReportExportLauron implements FromCollection, WithHeadings
                         $find->save();
                     }
                 }
-            } 
+            }
         } else {
-            if (!empty($this->campaignID) && $this->reportType == "ExtractAccounts") {
+            if (!empty($this->campaignID) && $this->reportType == "ExtractAccounts" ||  $this->reportType == "CallSummary") {
                 foreach ($output as $entry) {
                     $find = LauronAccount::where('mobileNumber', $entry->mobileNumber)->where('campaignName', $entry->campaignName)->where('campaignID', $this->campaignID)->where('dl', '0')->first();
                     if (!empty($find)) {
@@ -261,7 +363,46 @@ class ReportExportLauron implements FromCollection, WithHeadings
                     'Status Remark',
                 ];
                 break;
-            }
-            
+            case 'CallSummary':
+                return [
+                    'Date',
+                    'Action',
+                    'statusCode',
+                    'origTimestamp',
+                    'callEnded',
+                    'AHT(Seconds)',
+                    'Campaign name',
+                    'Segment',
+                    'Endo Date',
+                    'Account Number',
+                    'Original Balance',
+                    'Principal Balance',
+                    'Area',
+                    'Collection Effort',
+                    'Transaction',
+                    'Place Of Contact',
+                    'Point Of Contact',
+                    'Notes',
+                    'Created_at',
+                    'Updated_at',
+                    'PTP Amount Due',
+                    'PTP Date',
+                    'Agent name',
+                    'Lead Status',
+                    'Debtor',
+                    'Mobile Number',
+                    'Home Number',
+                    'Office Number',
+                    'Other Contact1',
+                    'Other Contact2',
+                    'Other Contact3',
+                    'Home Address',
+                    'CEAddressBusinessAddress',
+                    'Other Address1',
+                    'OtherAddress2',
+                    'Status Remark',
+                ];
+                break;
+        }
     }
 }
