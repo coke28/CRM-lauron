@@ -57,65 +57,65 @@ var adminReportValidation = function () {
          $.ajax({
            url: "/list/generateReport",
            method: "POST",
-           xhrFields:{
-            responseType:'blob',
+          //  xhrFields:{
+          //   responseType:'blob',
 
-           },
+          //  },
            data: formDatax,
            contentType: false,
            cache: false,
            processData:false,
            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
            success: function (data,status,xhr){
-            let disposition = xhr.getResponseHeader('content-disposition');
-            let matches = /"([^"]*)"/.exec(disposition);
-            let filename =(matches !=null && matches[1]? matches[1]:'Reports.csv');
+            // let disposition = xhr.getResponseHeader('content-disposition');
+            // let matches = /"([^"]*)"/.exec(disposition);
+            // let filename =(matches !=null && matches[1]? matches[1]:'Reports.csv');
 
-            let blob = new Blob([data],{
-              type:'octet/stream'
-            });
-            let link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = filename;
-            link.style.display = 'none';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            // let blob = new Blob([data],{
+            //   type:'octet/stream'
+            // });
+            // let link = document.createElement('a');
+            // link.href = window.URL.createObjectURL(blob);
+            // link.download = filename;
+            // link.style.display = 'none';
+            // document.body.appendChild(link);
+            // link.click();
+            // document.body.removeChild(link);
             //  data = JSON.parse(data);
-            //  if(data){
-            //    toastr.options = {
-            //     "closeButton": false,
-            //     "debug": false,
-            //     "newestOnTop": false,
-            //     "progressBar": false,
-            //     "positionClass": "toast-bottom-right",
-            //     "preventDuplicates": false,
-            //     "onclick": null,
-            //     "showDuration": "300",
-            //     "hideDuration": "1000",
-            //     "timeOut": "5000",
-            //     "extendedTimeOut": "1000",
-            //     "showEasing": "swing",
-            //     "hideEasing": "linear",
-            //     "showMethod": "fadeIn",
-            //     "hideMethod": "fadeOut"
-            //   };
+             if(data){
+               toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-bottom-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+              };
   
-            //   toastr.success(data.message, "Success");
-            //   $("#admin_report_form").trigger("reset");
-            //  }
-            //  else {
-            //    Swal.fire({
-            //       text: data.message,
-            //       icon: "error",
-            //       buttonsStyling: false,
-            //       confirmButtonText: "Ok, got it! NONO",
-            //       customClass: {
-            //           confirmButton: "btn btn-primary"
-            //       }
-            //   });
-            //   // window.location.reload();
-            //  }
+              toastr.success(data.message, "Success");
+              $("#admin_report_form").trigger("reset");
+             }
+             else {
+               Swal.fire({
+                  text: data.message,
+                  icon: "error",
+                  buttonsStyling: false,
+                  confirmButtonText: "Ok, got it! NONO",
+                  customClass: {
+                      confirmButton: "btn btn-primary"
+                  }
+              });
+              // window.location.reload();
+             }
 
              document.getElementById('btn-submit').setAttribute('data-kt-indicator', 'off');
              document.getElementById('btn-submit').disabled = false;
@@ -136,8 +136,8 @@ var adminReportValidation = function () {
   }();
   
   jQuery(document).ready(function() {
-      
       //DONT FOGET THIS!!!
       adminReportValidation.init();
+      document.getElementById('btn-submit').disabled = false;
   
     });
