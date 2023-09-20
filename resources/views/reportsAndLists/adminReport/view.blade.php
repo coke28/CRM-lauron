@@ -338,7 +338,7 @@
                                     <div class="col-md-offset-3 col-md-9">
                                         <div class="separator my-10"></div>
                                         <button type="submit" id="btn-submit" class="btn btn-primary font-weight-bold"
-                                            data-style="expand-right">
+                                            data-style="expand-right" disabled>
                                             <span class="ladda-label">
                                                 <i class="icon-arrow-right"></i>Submit</span>
                                             <span class="ladda-spinner"></span>

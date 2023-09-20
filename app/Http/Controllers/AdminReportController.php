@@ -30,8 +30,27 @@ class AdminReportController extends Controller
         // $request->ahtweek,$request->ahtmonth), 
         // $request->select_report_type." ".$request->select_date_type." ".Carbon::now()." ".'Reports.csv');
 
-        return Excel::download(new ReportExportLauron($request->product_bd_list, $request->campaignname, $request->select_report_type, 
-        $request->filtertype, $request->groupzz, $request->select_date_type, $request->start_date, $request->end_date), 
-        $request->select_report_type." ".$request->select_date_type." ".Carbon::now()." ".'Report.csv');
+        // return Excel::download(new ReportExportLauron($request->product_bd_list, $request->campaignname, $request->select_report_type, 
+        // $request->filtertype, $request->groupzz, $request->select_date_type, $request->start_date, $request->end_date), 
+        // $request->select_report_type." ".$request->select_date_type." ".Carbon::now()." ".'Report.csv');
+
+        (new ReportExportLauron(
+            $request->product_bd_list, 
+            $request->campaignname, 
+            $request->select_report_type, 
+            $request->filtertype, 
+            $request->groupzz, 
+            $request->select_date_type, 
+            $request->start_date, 
+            $request->end_date))
+        ->queue(
+            $request->select_report_type."_".
+            $request->select_date_type."_".
+            Carbon::now()->format('Y-m-d_H-i-s')."_".'Report.csv'
+        );
+
+        return json_encode([
+            'message' => 'Success'
+        ]);
     }
 }

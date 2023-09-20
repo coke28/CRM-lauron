@@ -19,9 +19,9 @@ class InsertLead implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($chunks)
-    {
-        $this->chunks = $chunks;
+    public function __construct(
+        public $chunks
+        ){
     }
 
     /**
@@ -33,7 +33,6 @@ class InsertLead implements ShouldQueue
     {
         foreach ($this->chunks as $chunk) {
             LauronLead::insert($chunk);
-            // Do insert here
         }
         //
     }
